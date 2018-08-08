@@ -1,0 +1,13 @@
+name: SHEF
+title: SHEF
+username:
+account: unlv-ir
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 397348
+bundleId: 1525411
+url: https://unlv-ir.shinyapps.io/SHEF/
+when: 1533760970.9746
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .gitattributes|README.md|SHEF/.gitattributes|SHEF/.git/refs/heads/master|SHEF/.git/refs/remotes/origin/master|www/hdr_teal_header.jpg

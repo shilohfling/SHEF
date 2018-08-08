@@ -1,0 +1,240 @@
+###################################################
+# A script for creating visualizations for        #
+# On Point.                                       #
+###################################################
+
+## Output files for use in On Point
+target_dir <- paste0("X:/Groups/Decision Support/Exchange/On Point/On Point ", 
+                     as.numeric(substr(Sys.Date(), 1, 4)) + 1, "/Graphics/")
+
+## Text Aesthetics
+bold.text <- element_text(face = "bold")
+
+## Generic Plotting Function
+ggplot_visualization <- function(my_dt,
+                                 x_axis = "FALL",
+                                 y_axis = "TOTAL_HEADCOUNT",
+                                 shape = NULL,
+                                 main_title = "Fall Enrollment",
+                                 x_lab = "Fall",
+                                 y_lab = "Total Headcount",
+                                 target_file = "enrollment_fall.jpg")
+                        {
+                           if (is.null(shape)) {
+                             aes_arg_list <- list(x = sym(x_axis), y = sym(y_axis))
+                           } else {
+                             aes_arg_list <- list(x = sym(x_axis), y = sym(y_axis), shape = sym(shape))
+                           }
+                          
+                           any_silly_name <- ggplot(data = my_dt, 
+                                                    mapping = do.call(what = aes,
+                                                                     args = aes_arg_list)) + 
+                                                    geom_point() + 
+                                                    geom_line() +
+                                                    scale_x_discrete(limits = my_dt[,x_axis]) +
+                                                    labs(title = main_title,
+                                                         x = x_lab,
+                                                         y = y_lab) +
+                                                    theme_classic() +
+                                                    theme(title = bold.text,
+                                                          axis.title = bold.text,
+                                                          axis.text.x = bold.text,
+                                                          axis.text.y = bold.text) +
+                                                    theme(legend.position = "bottom")
+                           ggsave(target_file, width = 6, height = 4)
+                        }
+
+###################################################
+## Section 1: Student Enrollment and FTE -----
+###################################################
+
+## Fall Enrollment
+ggplot_visualization(my_dt = enrollment_fall_dt$raw,
+                     x_axis = "FALL",
+                     y_axis ="TOTAL_HEADCOUNT",
+                     main_title = "Fall Enrollment",
+                     x_lab = "Fall",
+                     y_lab = "Total Headcount",
+                     target_file = paste0(target_dir, "enrollment_fall.jpg"))
+
+## Student Level Enrollment
+ggplot_visualization(my_dt = enrollment_student_level_dt$raw,
+                     x_axis = "FALL",
+                     y_axis = "TOTAL_HEADCOUNT",
+                     shape = "ACAD_CAREER",
+                     main_title = "Student Level Enrollment",
+                     x_lab = "Fall",
+                     y_lab = "Total Headcount",
+                     target_file = paste0(target_dir, "enrollment_student_level.jpg"))
+
+## Undergraduate Enrollment by Residency
+ggplot_visualization(my_dt = enrollment_residency_dt$raw,
+                     x_axis = "FALL",
+                     y_axis = "TOTAL_HEADCOUNT",
+                     shape = "RESIDENCY",
+                     main_title = "Undergraduate Enrollment by Residency",
+                     x_lab = "Fall",
+                     y_lab = "Total Headcount",
+                     target_file = paste0(target_dir, "enrollment_residency.jpg"))
+
+## Undergraduate Minority Enrollment by Ethnicity
+ggplot_visualization(my_dt = enrollment_ethnicity_dt$raw,
+                     x_axis = "FALL",
+                     y_axis = "TOTAL_HEADCOUNT",
+                     shape = "MINORITY_TOTAL",
+                     main_title = "Undergraduate Minority Enrollment by Ethnicity",
+                     x_lab = "Fall",
+                     y_lab = "Total Headcount",
+                     target_file = paste0(target_dir, "enrollment_ethnicity.jpg"))
+
+## Honors College Enrollment
+ggplot_visualization(my_dt = enrollment_honors_dt$raw,
+                     x_axis = "FALL",
+                     y_axis = "TOTAL_HEADCOUNT",
+                     shape = "HONORS",
+                     main_title = "Honors College Enrollment",
+                     x_lab = "Fall",
+                     y_lab = "Total Headcount",
+                     target_file = paste0(target_dir, "enrollment_honors.jpg"))
+
+## Millennium Scholarship Enrollment
+ggplot_visualization(my_dt = enrollment_millennium_dt$raw,
+                     x_axis = "FALL",
+                     y_axis = "TOTAL_HEADCOUNT",
+                     shape = "HONORS",
+                     main_title = "Millennium Scholarship Enrollment",
+                     x_lab = "Fall",
+                     y_lab = "Total Headcount",
+                     target_file = paste0(target_dir, "enrollment_millennium.jpg"))
+
+# ## New Freshmen & Transfer Enrollment
+# ggplot_visualization(my_dt = enrollment_new_frsh_transfer_dt$raw,
+#                      x_axis = "FALL",
+#                      y_axis = "TOTAL",
+#                      main_title = "New Freshmen & Transfer Enrollment",
+#                      x_lab = "Fall",
+#                      y_lab = "Total Headcount",
+#                      target_file = paste0(target_dir, "enrollment_new_frsh_transfer.jpg"))
+# 
+# ## New Undergraduate Transfer Student Profile
+# ## Does not fit generic function. Must be custom.
+# enrollment_new_undg <- ggplot(enrollment_new_undg_dt,
+#                               aes(x = NSHE_INSTITUTIONS,
+#                                   fill = FALL)) +
+#                               geom_bar() +
+#                               coord_flip() +
+#                               labs(title = "New Undergraduate Transfer Student Profile",
+#                                    # subtitle = "Fall 2016",
+#                                    x = "",
+#                                    y = "") +
+#                               theme_classic()  +
+#                               theme(title = bold.text,
+#                                     axis.title = bold.text,
+#                                     axis.text.x = bold.text,
+#                                     axis.text.y = bold.text) +
+#                               theme(legend.position = "bottom")
+# ggsave("enrollment_new_undg.jpg", width = 6, height = 4)
+#
+# ## Graduate Student Enrollment
+# ggplot_visualization(my_dt = enrollment_grad_student_dt$raw,
+#                      x_axis = "FALL",
+#                      y_axis = "TOTAL",
+#                      main_title = "Graduate Student Enrollment",
+#                      x_lab = "Fall",
+#                      y_lab = "Total Headcount",
+#                      target_file = paste0(target_dir, "enrollment_grad_student.jpg"))
+#
+# ## Graduate FTE
+# ggplot_visualization(my_dt = enrollment_grad_fte_dt$raw,
+#                      x_axis = "ACADEMIC_YEAR",
+#                      y_axis = "FTE",
+#                      main_title = "Graduate FTE",
+#                      x_lab = "Academic Year",
+#                      y_lab = "FTE",
+#                      target_file = paste0(target_dir, "enrollment_grad_fte.jpg"))
+# 
+# ## WUE Enrollment by State of Origin
+# ggplot_visualization(my_dt = enrollment_wue_dt$raw,
+#                      x_axis = "FALL",
+#                      y_axis = "TOTAL",
+#                      main_title = "Western Undergraduate Exchange (WUE) Enrollment by State of Origin",
+#                      x_lab = "Fall",
+#                      y_lab = "Total Headcount",
+#                      target_file = paste0(target_dir, "enrollment_wue.jpg"))
+# 
+# ## International Student Enrollment
+# ggplot_visualization(my_dt = enrollment_international_dt$raw,
+#                      x_axis = "FALL",
+#                      y_axis = "TOTAL",
+#                      shape = "ACAD_CAREER",
+#                      main_title = "International Student Enrollment",
+#                      x_lab = "Fall",
+#                      y_lab = "Total Headcount",
+#                      target_file = paste0(target_dir, "enrollment_international.jpg"))
+# 
+# ## Number of Undergraduates by Credits Enrolled
+# ggplot_visualization(my_dt = enrollment_undg_credits_dt$raw,
+#                      x_axis = "FALL",
+#                      y_axis = "COUNT(DISTINCTEMPLID)",
+#                      shape = "CREDITS_ENROLLED",
+#                      main_title = "Number of Undergraduates by Credits Enrolled",
+#                      x_lab = "Fall",
+#                      y_lab = "% of Students",
+#                      target_file = paste0(target_dir, "enrollment_undg_credits.jpg"))
+# 
+# ## Undergraduate Course Section Size
+# ggplot_visualization(my_dt = enrollment_undg_sec_size_dt$raw,
+#                      x_axis = "FALL",
+#                      y_axis = "TOTAL",
+#                      shape = "SECTION_SIZE",
+#                      main_title = "Undergraduate Course Section Size",
+#                      x_lab = "Fall",
+#                      y_lab = "Total Headcount",
+#                      target_file = paste0(target_dir, "enrollment_undg_sec_size.jpg"))
+
+
+###################################################
+## Section 2: New Freshmen -----
+###################################################
+
+# ## New Freshmen by Residency
+# sec2Agraph <- ggplot(df, aes()) +
+#   geom_point() +
+#   labs(title = "New Freshmen by Residency")
+# 
+# ## New Undergraduate Transfers by Residency
+# sec2Bgraph <- ggplot(df, aes()) +
+#   geom_point() +
+#   labs(title = "New Undergraduate Transfers by Residency")
+# 
+# ## Average SAT Scores of New Freshmen
+# sec2Cgraph <- ggplot(df, aes()) +
+#   geom_point() +
+#   labs(title = "Average SAT Scores of New Freshmen")
+# 
+# ## Average High School GPA of New Freshmen
+# sec2Dgraph <- ggplot(df, aes()) +
+#   geom_point() +
+#   labs(title = "Average High School GPA of New Freshmen")
+# 
+# ## Freshmen from Top 10% & Top 25% of High School Class
+# sec2Egraph <- ggplot(df, aes()) +
+#   geom_bar() +
+#   labs(title = "Freshmen from Top 10% & Top 25% of High School Class")
+# 
+# # Participation Rate of New Clark County HS Graduates
+# sec2Fgraph <- ggplot(df, aes()) +
+#                 geom_point() +
+#                 labs(title = "Participation Rate of New Clark County HS Graduates",
+#                      x = "Year",
+#                      y = "# of Students") +
+#                 scale_color_brewer(palette = "Greys")
+# 
+# ## First to Second Year Retention Rate
+# sec2Ggraph <- ggplot(df, aes()) +
+#   geom_point() +
+#   labs(title = "First to Second Year Retention Rate")
+
+
+
+

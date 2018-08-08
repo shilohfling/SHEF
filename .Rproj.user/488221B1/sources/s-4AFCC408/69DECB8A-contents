@@ -25,6 +25,11 @@ df$`Net Tuition per FTE, Constant Dollars` <- round(as.numeric(df$`Net Tuition p
 df$`Student Share (Net Tuition as a Proportion of Total Educational Revenues)` <- round(as.numeric(df$`Student Share (Net Tuition as a Proportion of Total Educational Revenues)`), 
                                                                                         digits = 2)
 
+## Aesthetics -----
+# colors <- c("#B10202", rep("#666666", length(input$states) - 1))
+bold.text <- element_text(face = "bold")
+
+
 ## Make choices -----
 default_state <- "Nevada"
 state_choices <- unique(sort(df$State))
@@ -89,12 +94,17 @@ shinyServer(function(input, output, session) {
                     fill = input$states)) +
             geom_point() +
             geom_line() +
-            scale_x_continuous(breaks = seq(1992, 2017, by = 1)) +
+            scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
             labs(title = "Net Public FTE Enrollment",
                   x = "Fiscal Year",
                   y = "") +
+            guides(fill = guide_legend(title = "States")) +
             expand_limits(y = 0) +
             theme_classic() +
+            theme(title = bold.text,
+                  axis.title = bold.text,
+                  axis.text.x = bold.text,
+                  axis.text.y = bold.text) +
             theme(legend.position = "bottom")
           ),
           
@@ -107,12 +117,17 @@ shinyServer(function(input, output, session) {
                        fill = input$states)) +
               geom_point() +
               geom_line() +
-              scale_x_continuous(breaks = seq(1992, 2017, by = 1)) +
+              scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
               labs(title = "Educational Appropriations per FTE",
                    x = "Fiscal Year",
                    y = "Constant Dollars") +
+              guides(fill = guide_legend(title = "States")) +
               expand_limits(y = 0) +
               theme_classic() +
+              theme(title = bold.text,
+                    axis.title = bold.text,
+                    axis.text.x = bold.text,
+                    axis.text.y = bold.text) +
               theme(legend.position = "bottom")
           ),
         
@@ -125,12 +140,17 @@ shinyServer(function(input, output, session) {
                        fill = input$states)) +
               geom_point() +
               geom_line() +
-              scale_x_continuous(breaks = seq(1992, 2017, by = 1)) +
+              scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
               labs(title = "Net Tuition per FTE",
                    x = "Fiscal Year",
                    y = "Constant Dollars") +
+              guides(fill = guide_legend(title = "States")) +
               expand_limits(y = 0) +
               theme_classic() +
+              theme(title = bold.text,
+                    axis.title = bold.text,
+                    axis.text.x = bold.text,
+                    axis.text.y = bold.text) +
               theme(legend.position = "bottom")
           ),
           
@@ -143,13 +163,18 @@ shinyServer(function(input, output, session) {
                        fill = input$states)) +
               geom_point() +
               geom_line() +
-              scale_x_continuous(breaks = seq(1992, 2017, by = 1)) +
+              scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
               labs(title = "Student Share",
                    x = "Fiscal Year",
                    y = "") +
+              guides(fill = guide_legend(title = "States")) +
               expand_limits(y = 0) +
               theme_classic() +
-              theme(legend.position = "bottom")
+              theme(title = bold.text,
+                    axis.title = bold.text,
+                    axis.text.x = bold.text,
+                    axis.text.y = bold.text) +
+              theme(legend.position = "bottom") 
           )
         ) ## End of Main panel
       ) ## End of Sidebar Layout
