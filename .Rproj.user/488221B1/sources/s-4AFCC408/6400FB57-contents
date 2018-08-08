@@ -52,7 +52,6 @@ th {
   color: #ffffff;
 }
 
-
 hr { 
     border-color: #39a07e;
 } 
