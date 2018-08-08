@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1533754110816.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "69DECB8A",
+    "lastKnownWriteTime" : 1533754270,
+    "last_content_update" : 1533754279134,
+    "path" : "/Volumes/Groups/Decision Support/Exchange/Shiloh/SHEF/server.r",
+    "project_path" : "server.r",
+    "properties" : {
+        "cursorPosition" : "78,20",
+        "scrollLine" : "67",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

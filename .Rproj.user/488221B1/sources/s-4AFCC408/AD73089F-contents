@@ -1,0 +1,62 @@
+source("X:/Groups/Decision Support/Exchange/On Point/On Point 2019/R/R_LIB/LIB_Sweave_Render_Functions_for_OnPoint.R")
+## Load Skip's crappy script
+source("X:/Groups/Decision Support/Exchange/crookj3/R_LIB/LIB_SQL_from_text.R")
+###################################################
+# The main script for creating On Point.          #
+###################################################
+
+###################################################
+## Set working directory -----
+###################################################
+#setwd("X:/Groups/Decision Support/Exchange/On Point/On Point 2019/")
+
+###################################################
+## Load packages -----
+###################################################
+require(ggplot2)
+require(dplyr)
+require(sqldf)
+require(DBI)
+require(ROracle)
+require(xtable)
+
+###################################################
+## Load sources -----
+###################################################
+#source("lvepmprd_database_connection.R")
+my_on_point<-read.csv("X:/Groups/Decision Support/Exchange/On Point/On Point 2019/R/excel/on_point_guts.csv",header=TRUE,stringsAsFactors = FALSE)
+my_sweave_output<-"X:/Groups/Decision Support/Exchange/On Point/On Point 2019/R/onpointready.Rnw"
+
+
+header_con<-file("X:/Groups/Decision Support/Exchange/On Point/On Point 2019/R/AI-Header-main_sweave.Rnw","r")
+my_sweave<-readLines(header_con,-1)
+close(header_con)
+
+my_chapters<-unique(as.character(my_on_point$Chapter))
+for (i_chapter in my_chapters) {
+  my_sweave<-c(my_sweave,render_my_chapter(chapter_title=i_chapter))
+  i_sections<-my_on_point[as.character(my_on_point$Chapter)==i_chapter,]
+  for (k in 1:length(i_sections$Section)) {
+    if (nchar(i_sections$shape[k])<2) k_shape<-NULL else k_shape<-i_sections$shape[k]
+    if (nchar(i_sections$special_note[k])<2) k_special_note<-NULL else k_special_note<-i_sections$special_note[k]
+    k_render<-render_my_metric(sql_file=i_sections$SQL[k],
+                               section_title=i_sections$Section[k],
+                               image_filename=i_sections$jpg[k],
+                               table_filename=i_sections$tex[k],
+                               special_notes=k_special_note,
+                               x_axis=i_sections$x_axis[k],
+                               x_lab=i_sections$x_lab[k],
+                               y_axis=i_sections$y_axis[k],
+                               y_lab=i_sections$y_lab[k],
+                               shape=k_shape,
+                               main_title=i_sections$main_title[k])
+    
+    my_sweave<-c(my_sweave,k_render)
+  }
+  
+
+  
+}
+
+my_sweave<-c(my_sweave,"\\end{document}")
+writeLines(my_sweave,con=my_sweave_output,sep="\n")

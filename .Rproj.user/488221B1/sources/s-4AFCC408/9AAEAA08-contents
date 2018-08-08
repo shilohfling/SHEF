@@ -1,0 +1,59 @@
+body {
+    background-color: #ffffff;
+    background: #ffffff url("color-gray1.jpg") no-repeat right top;
+    background-size: 100% 30%;
+    color: #444444;
+    font-family: 'Arial', sans-serif;
+}
+
+img { 
+  width:100%; 
+}
+
+  
+h2 {
+    font-family: 'Arial', sans-serif;
+    font-size: 30px;
+    color: #a1c689;
+    display: inline;
+    font-weight: bold;
+}
+
+h3 {
+  font-family: 'Arial', sans-serif;
+  font-size: 15px;
+  color: #ffffff;
+  display: inline;
+}
+
+h4 {
+  font-family: 'Arial', sans-serif;
+  font-size: 20px;
+  color: #444444;
+  display: inline;
+  font-weight: bold;
+}
+
+h5 {
+  font-family: 'Arial', sans-serif;
+  font-size: 15px;
+  color: #444444;
+  display: inline;
+}
+
+h6 {
+  font-family: 'Arial', sans-serif;
+  font-size: 10px;
+  color: #4b772f;
+  display: inline;
+}
+
+th {
+  background-color: #c6c6c4;
+  color: #ffffff;
+}
+
+
+hr { 
+    border-color: #4b772f;
+} 
