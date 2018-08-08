@@ -24,12 +24,6 @@ df$`Net Tuition per FTE, Constant Dollars` <- round(as.numeric(df$`Net Tuition p
                                                     digits = 2)
 df$`Student Share (Net Tuition as a Proportion of Total Educational Revenues)` <- round(as.numeric(df$`Student Share (Net Tuition as a Proportion of Total Educational Revenues)`), 
                                                                                         digits = 2)
-
-## Aesthetics -----
-# colors <- c("#B10202", rep("#666666", length(input$states) - 1))
-bold.text <- element_text(face = "bold")
-
-
 ## Make choices -----
 default_state <- "Nevada"
 state_choices <- unique(sort(df$State))
@@ -48,6 +42,12 @@ wue_choices <- c("Alaska",
                  "Washington",
                  "Wyoming",
                  "US")
+
+## Aesthetics -----
+colors <- c("#60ba9c", 
+            rep("#666666", length(wue_choices) - 1)
+            )
+bold.text <- element_text(face = "bold")
 
 ## Beginning of server -----
 shinyServer(function(input, output, session) {
@@ -87,14 +87,18 @@ shinyServer(function(input, output, session) {
         
         ## Main Panel -----
         mainPanel(
+          ## First plot
           output$plot1 <- renderPlot(
           ggplot(dataset(), 
                 aes(x = `Fiscal Year`, 
                     y = `Net Public FTE Enrollment`, 
-                    fill = input$states)) +
+                    color = State,
+                    shape = State)) +
             geom_point() +
             geom_line() +
             scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
+            scale_color_manual(values = colors) +
+            scale_shape_manual(values = c(0:25)) +
             labs(title = "Net Public FTE Enrollment",
                   x = "Fiscal Year",
                   y = "") +
@@ -109,15 +113,18 @@ shinyServer(function(input, output, session) {
           ),
           
           br(), hr(), br(),
-          
+          ## Second Plot
           output$plot2 <- renderPlot(
             ggplot(dataset(), 
                    aes(x = `Fiscal Year`, 
                        y = `Educational Appropriations per FTE, Constant Dollars`, 
-                       fill = input$states)) +
+                       color = State,
+                       shape = State)) +
               geom_point() +
               geom_line() +
               scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
+              scale_color_manual(values = colors) +
+              scale_shape_manual(values = c(0:25)) +
               labs(title = "Educational Appropriations per FTE",
                    x = "Fiscal Year",
                    y = "Constant Dollars") +
@@ -132,15 +139,18 @@ shinyServer(function(input, output, session) {
           ),
         
           br(), hr(), br(),
-          
+          ## Third plot
           output$plot3 <- renderPlot(
             ggplot(dataset(), 
                    aes(x = `Fiscal Year`, 
                        y = `Net Tuition per FTE, Constant Dollars`, 
-                       fill = input$states)) +
+                       color = State,
+                       shape = State)) +
               geom_point() +
               geom_line() +
               scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
+              scale_color_manual(values = colors) +
+              scale_shape_manual(values = c(0:25)) +
               labs(title = "Net Tuition per FTE",
                    x = "Fiscal Year",
                    y = "Constant Dollars") +
@@ -155,15 +165,18 @@ shinyServer(function(input, output, session) {
           ),
           
           br(), hr(), br(),
-          
+          ## Fourth plot
           output$plot4 <- renderPlot(
             ggplot(dataset(), 
                    aes(x = `Fiscal Year`, 
                        y = `Student Share (Net Tuition as a Proportion of Total Educational Revenues)`,
-                       fill = input$states)) +
+                       color = State,
+                       shape = State)) +
               geom_point() +
               geom_line() +
               scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
+              scale_color_manual(values = colors) +
+              scale_shape_manual(values = c(0:25)) +
               labs(title = "Student Share",
                    x = "Fiscal Year",
                    y = "") +
