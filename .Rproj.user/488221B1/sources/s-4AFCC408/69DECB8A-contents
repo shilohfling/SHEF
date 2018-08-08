@@ -9,6 +9,9 @@ library(ggplot2)
 library(dplyr)
 library(openxlsx)
 
+## Load sources -----
+source("ggplot2_formatter.R")
+
 ## Load data -----
 df <- read.xlsx("SHEF_State_by_State_Wave_Charts_FY17.xlsx")
 
@@ -44,9 +47,25 @@ wue_choices <- c("Alaska",
                  "US")
 
 ## Aesthetics -----
-colors <- c("#60ba9c", 
-            rep("#666666", length(wue_choices) - 1)
-            )
+# colors <- c("#60ba9c", 
+#             rep("#666666", length(wue_choices) - 1)
+#             )
+colors <- c("Nevada" = "#60ba9c",
+            "Alaska" = "#666666",
+            "Arizona" = "#666666",
+            "California" = "#666666",
+            "Colorado" = "#666666",
+            "Hawaii" = "#666666",
+            "Idaho" = "#666666",
+            "Montana" = "#666666",
+            "New Mexico" = "#666666",
+            "North Dakota" = "#666666",
+            "Oregon" = "#666666",
+            "South Dakota" = "#666666",
+            "Utah" = "#666666",
+            "Washington" = "#666666",
+            "Wyoming" = "#666666",
+            "US" = "#115edb")
 bold.text <- element_text(face = "bold")
 
 ## Beginning of server -----
@@ -97,6 +116,7 @@ shinyServer(function(input, output, session) {
             geom_point() +
             geom_line() +
             scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
+            scale_y_continuous(labels = scales::comma) +
             scale_color_manual(values = colors) +
             scale_shape_manual(values = c(0:25)) +
             labs(title = "Net Public FTE Enrollment",
@@ -123,6 +143,7 @@ shinyServer(function(input, output, session) {
               geom_point() +
               geom_line() +
               scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
+              scale_y_continuous(labels = human_usd) +
               scale_color_manual(values = colors) +
               scale_shape_manual(values = c(0:25)) +
               labs(title = "Educational Appropriations per FTE",
@@ -149,6 +170,7 @@ shinyServer(function(input, output, session) {
               geom_point() +
               geom_line() +
               scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
+              scale_y_continuous(labels = human_usd) +
               scale_color_manual(values = colors) +
               scale_shape_manual(values = c(0:25)) +
               labs(title = "Net Tuition per FTE",
