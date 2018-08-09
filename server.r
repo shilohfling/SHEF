@@ -182,7 +182,7 @@ shinyServer(function(input, output, session) {
                   scale_color_manual(values = color) +
                   scale_shape_manual(values = c(0:25)) +
                   labs(title = "Net Public FTE Enrollment",
-                       x = "Fiscal Year",
+                       x = "",
                        y = "") +
                   guides(fill = guide_legend(title = "States")) +
                   expand_limits(y = c(0.0, 2.5)) +
@@ -209,7 +209,7 @@ shinyServer(function(input, output, session) {
                   scale_shape_manual(values = c(0:25)) +
                   labs(title = "Educational Appropriations per FTE",
                        x = "Fiscal Year",
-                       y = "Constant Dollars") +
+                       y = "") +
                   guides(fill = guide_legend(title = "States")) +
                   expand_limits(y = c(0.0, 2.5)) +
                   theme_classic() +
@@ -235,7 +235,7 @@ shinyServer(function(input, output, session) {
                   scale_shape_manual(values = c(0:25)) +
                   labs(title = "Net Tuition per FTE",
                        x = "Fiscal Year",
-                       y = "Constant Dollars") +
+                       y = "") +
                   guides(fill = guide_legend(title = "States")) +
                   expand_limits(y = c(0.0, 2.5)) +
                   theme_classic() +
