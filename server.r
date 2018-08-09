@@ -185,7 +185,7 @@ shinyServer(function(input, output, session) {
                        x = "Fiscal Year",
                        y = "") +
                   guides(fill = guide_legend(title = "States")) +
-                  expand_limits(y = 0) +
+                  expand_limits(y = c(0.0, 2.5)) +
                   theme_classic() +
                   theme(title = bold.text,
                         axis.title = bold.text,
@@ -211,7 +211,7 @@ shinyServer(function(input, output, session) {
                        x = "Fiscal Year",
                        y = "Constant Dollars") +
                   guides(fill = guide_legend(title = "States")) +
-                  expand_limits(y = 0) +
+                  expand_limits(y = c(0.0, 2.5)) +
                   theme_classic() +
                   theme(title = bold.text,
                         axis.title = bold.text,
@@ -237,7 +237,7 @@ shinyServer(function(input, output, session) {
                        x = "Fiscal Year",
                        y = "Constant Dollars") +
                   guides(fill = guide_legend(title = "States")) +
-                  expand_limits(y = 0) +
+                  expand_limits(y = c(0.0, 2.5)) +
                   theme_classic() +
                   theme(title = bold.text,
                         axis.title = bold.text,
@@ -263,7 +263,7 @@ shinyServer(function(input, output, session) {
                        x = "Fiscal Year",
                        y = "") +
                   guides(fill = guide_legend(title = "States")) +
-                  expand_limits(y = 0) +
+                  expand_limits(y = c(0.0, 2.5)) +
                   theme_classic() +
                   theme(title = bold.text,
                         axis.title = bold.text,
