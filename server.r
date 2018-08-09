@@ -56,24 +56,27 @@ state_choices <- unique(state_choices$State) %>%
                   sort(.)
 
 ## Aesthetics -----
-color <- c("Nevada" = "60ba9c")
-for(i in 1:length(df$State)) {
-  if(df$State[i] == default_state) {
-      color[i] <- "#60ba9c"
-    } else if (df$State[i] %in% wue_choices) {
-      df$Color[i] <- "#666666"
-    } else if(df$State[i] == usa) {
-      df$Color[i] <- "#115edb"
-    } else {
-      df$Color[i] <- "#000000"
-    }
-}
-
-# concat <- c()
-# for (i in 1:length(unique(df$State))) {
-#   concat[i] <- paste("\"", df$State[i], "\"", " = ", "\"", df$Color[i], "\"")
-# }
-
+color <- c(
+            ## Default State
+            "Nevada" = "#60ba9c",
+            ## Overall USA
+            "US" = "#115edb",
+            ## WUE States
+            "Alaska"         = "#666666", "Arizona"       = "#666666", "California"     = "#666666", "Colorado"       = "#666666",
+            "Hawaii"         = "#666666", "Idaho"         = "#666666", "Montana"        = "#666666", "New Mexico"     = "#666666",
+            "North Dakota"   = "#666666", "Oregon"        = "#666666", "South Dakota"   = "#666666", "Utah"           = "#666666",
+            "Washington"     = "#666666", "Wyoming"       = "#666666",
+            ## All other States
+            "Alabama"        = "#000000", "Arkansas"      = "#000000", "Connecticut"    = "#000000", "Delaware"       = "#000000", 
+            "Florida"        = "#000000", "Georgia"       = "#000000", "Illinois"       = "#000000", "Indiana"        = "#000000", 
+            "Iowa"           = "#000000", "Kansas"        = "#000000", "Kentucky"       = "#000000", "Louisiana"      = "#000000", 
+            "Maine"          = "#000000", "Maryland"      = "#000000", "Massachusetts"  = "#000000", "Michigan"       = "#000000", 
+            "Minnesota"      = "#000000", "Mississippi"   = "#000000", "Missouri"       = "#000000", "Nebraska"       = "#000000", 
+            "New Hampshire"  = "#000000", "New Jersey"    = "#000000", "New York"       = "#000000", "North Carolina" = "#000000", 
+            "Ohio"           = "#000000", "Oklahoma"      = "#000000", "Pennsylvania"   = "#000000", "Rhode Island"   = "#000000", 
+            "South Carolina" = "#000000", "Tennessee"     = "#000000", "Texas"          = "#000000", "Vermont"        = "#000000", 
+            "Virginia"       = "#000000", "Washington DC" = "#000000", "West Virginia"  = "#000000", "Wisconsin"      = "#000000"
+)
 bold.text <- element_text(face = "bold")
 
 ## Beginning of server -----
@@ -126,7 +129,7 @@ shinyServer(function(input, output, session) {
             geom_point() +
             geom_line() +
             scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
-            scale_color_manual(values = concat) +
+            scale_color_manual(values = color) +
             scale_shape_manual(values = c(0:25)) +
             labs(title = "Net Public FTE Enrollment",
                   x = "Fiscal Year",
@@ -153,7 +156,7 @@ shinyServer(function(input, output, session) {
               geom_line() +
               scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
               scale_y_continuous(labels = human_usd) +
-              scale_color_manual(values = df$Color) +
+              scale_color_manual(values = color) +
               scale_shape_manual(values = c(0:25)) +
               labs(title = "Educational Appropriations per FTE",
                    x = "Fiscal Year",
@@ -180,7 +183,7 @@ shinyServer(function(input, output, session) {
               geom_line() +
               scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
               scale_y_continuous(labels = human_usd) +
-              scale_color_manual(values = df$Color) +
+              scale_color_manual(values = color) +
               scale_shape_manual(values = c(0:25)) +
               labs(title = "Net Tuition per FTE",
                    x = "Fiscal Year",
@@ -206,7 +209,7 @@ shinyServer(function(input, output, session) {
               geom_point() +
               geom_line() +
               scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
-              scale_color_manual(values = df$Color) +
+              scale_color_manual(values = color) +
               scale_shape_manual(values = c(0:25)) +
               labs(title = "Student Share",
                    x = "Fiscal Year",
