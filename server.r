@@ -19,15 +19,12 @@ df <- read.xlsx("SHEF_State_by_State_Wave_Charts_FY17.xlsx")
 colnames(df) <- df[1, ] ## Rename columns
 df <- df[-1, ]          ## Drop first row (column names)
 df$`Fiscal Year` <- as.numeric(df$`Fiscal Year`)
-df$`Net Public FTE Enrollment` <- round(as.numeric(df$`Net Public FTE Enrollment`), 
-                                        digits = 2)
-df$`Educational Appropriations per FTE, Constant Dollars` <- round(as.numeric(df$`Educational Appropriations per FTE, Constant Dollars`), 
-                                                                   digits = 2)
-df$`Net Tuition per FTE, Constant Dollars` <- round(as.numeric(df$`Net Tuition per FTE, Constant Dollars`), 
-                                                    digits = 2)
-df$`Student Share (Net Tuition as a Proportion of Total Educational Revenues)` <- round(as.numeric(df$`Student Share (Net Tuition as a Proportion of Total Educational Revenues)`), 
-                                                                                        digits = 2)
+df$`Net Public FTE Enrollment` <- round(as.numeric(df$`Net Public FTE Enrollment`), 2)
+df$`Educational Appropriations per FTE, Constant Dollars` <- round(as.numeric(df$`Educational Appropriations per FTE, Constant Dollars`), 2)
+df$`Net Tuition per FTE, Constant Dollars` <- round(as.numeric(df$`Net Tuition per FTE, Constant Dollars`), 2)
+df$`Student Share (Net Tuition as a Proportion of Total Educational Revenues)` <- round(as.numeric(df$`Student Share (Net Tuition as a Proportion of Total Educational Revenues)`), 2)
 
+## Rescale Net Public FTE Enrollment
 for(i in 1:length(df$`Net Public FTE Enrollment`)) {
   if(df$`Fiscal Year`[i] == 1992) {
     base <- df$`Net Public FTE Enrollment`[i]
@@ -37,7 +34,6 @@ for(i in 1:length(df$`Net Public FTE Enrollment`)) {
 
 ## Make choices -----
 default_state <- "Nevada"
-state_choices <- unique(sort(df$State))
 wue_choices <- c("Alaska",
                  "Arizona",
                  "California",
@@ -51,29 +47,33 @@ wue_choices <- c("Alaska",
                  "South Dakota",
                  "Utah",
                  "Washington",
-                 "Wyoming",
-                 "US")
+                 "Wyoming")
+usa <- "US"
+state_choices <- df[!(df$State) %in% wue_choices, ] %>%
+                  .[!(.$State) %in% usa, ] %>%
+                  .[!(.$State) %in% default_state, ]
+state_choices <- unique(state_choices$State) %>%
+                  sort(.)
 
 ## Aesthetics -----
-# colors <- c("#60ba9c", 
-#             rep("#666666", length(wue_choices) - 1)
-#             )
-colors <- c("Nevada" = "#60ba9c",
-            "Alaska" = "#666666",
-            "Arizona" = "#666666",
-            "California" = "#666666",
-            "Colorado" = "#666666",
-            "Hawaii" = "#666666",
-            "Idaho" = "#666666",
-            "Montana" = "#666666",
-            "New Mexico" = "#666666",
-            "North Dakota" = "#666666",
-            "Oregon" = "#666666",
-            "South Dakota" = "#666666",
-            "Utah" = "#666666",
-            "Washington" = "#666666",
-            "Wyoming" = "#666666",
-            "US" = "#115edb")
+color <- c("Nevada" = "60ba9c")
+for(i in 1:length(df$State)) {
+  if(df$State[i] == default_state) {
+      color[i] <- "#60ba9c"
+    } else if (df$State[i] %in% wue_choices) {
+      df$Color[i] <- "#666666"
+    } else if(df$State[i] == usa) {
+      df$Color[i] <- "#115edb"
+    } else {
+      df$Color[i] <- "#000000"
+    }
+}
+
+# concat <- c()
+# for (i in 1:length(unique(df$State))) {
+#   concat[i] <- paste("\"", df$State[i], "\"", " = ", "\"", df$Color[i], "\"")
+# }
+
 bold.text <- element_text(face = "bold")
 
 ## Beginning of server -----
@@ -103,7 +103,9 @@ shinyServer(function(input, output, session) {
           selectInput(inputId = "states",
                       label = h5("States"),
                       choices = list(default_state,
-                                    "Western Undergraduate Exchange (WUE)" = wue_choices
+                                    "Overall United States" = usa,
+                                    "Western Undergraduate Exchange (WUE)" = wue_choices,
+                                    "Other States" = state_choices
                                     ),
                       multiple = TRUE,
                       selected = default_state
@@ -124,8 +126,7 @@ shinyServer(function(input, output, session) {
             geom_point() +
             geom_line() +
             scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
-            scale_y_continuous(labels = scales::comma) +
-            scale_color_manual(values = colors) +
+            scale_color_manual(values = concat) +
             scale_shape_manual(values = c(0:25)) +
             labs(title = "Net Public FTE Enrollment",
                   x = "Fiscal Year",
@@ -152,7 +153,7 @@ shinyServer(function(input, output, session) {
               geom_line() +
               scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
               scale_y_continuous(labels = human_usd) +
-              scale_color_manual(values = colors) +
+              scale_color_manual(values = df$Color) +
               scale_shape_manual(values = c(0:25)) +
               labs(title = "Educational Appropriations per FTE",
                    x = "Fiscal Year",
@@ -179,7 +180,7 @@ shinyServer(function(input, output, session) {
               geom_line() +
               scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
               scale_y_continuous(labels = human_usd) +
-              scale_color_manual(values = colors) +
+              scale_color_manual(values = df$Color) +
               scale_shape_manual(values = c(0:25)) +
               labs(title = "Net Tuition per FTE",
                    x = "Fiscal Year",
@@ -205,7 +206,7 @@ shinyServer(function(input, output, session) {
               geom_point() +
               geom_line() +
               scale_x_continuous(breaks = seq(1992, 2017, by = 2)) +
-              scale_color_manual(values = colors) +
+              scale_color_manual(values = df$Color) +
               scale_shape_manual(values = c(0:25)) +
               labs(title = "Student Share",
                    x = "Fiscal Year",
