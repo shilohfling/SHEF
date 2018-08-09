@@ -27,6 +27,14 @@ df$`Net Tuition per FTE, Constant Dollars` <- round(as.numeric(df$`Net Tuition p
                                                     digits = 2)
 df$`Student Share (Net Tuition as a Proportion of Total Educational Revenues)` <- round(as.numeric(df$`Student Share (Net Tuition as a Proportion of Total Educational Revenues)`), 
                                                                                         digits = 2)
+
+for(i in 1:length(df$`Net Public FTE Enrollment`)) {
+  if(df$`Fiscal Year`[i] == 1992) {
+    base <- df$`Net Public FTE Enrollment`[i]
+  }
+  df$Rescale[i] <- round((df$`Net Public FTE Enrollment`[i] / base), 2)
+}
+
 ## Make choices -----
 default_state <- "Nevada"
 state_choices <- unique(sort(df$State))
@@ -94,7 +102,7 @@ shinyServer(function(input, output, session) {
           ## Subsetting options 
           selectInput(inputId = "states",
                       label = h5("States"),
-                      choices = list("Nevada" = default_state,
+                      choices = list(default_state,
                                     "Western Undergraduate Exchange (WUE)" = wue_choices
                                     ),
                       multiple = TRUE,
@@ -110,7 +118,7 @@ shinyServer(function(input, output, session) {
           output$plot1 <- renderPlot(
           ggplot(dataset(), 
                 aes(x = `Fiscal Year`, 
-                    y = `Net Public FTE Enrollment`, 
+                    y = Rescale, 
                     color = State,
                     shape = State)) +
             geom_point() +
